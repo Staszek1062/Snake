@@ -15,3 +15,4 @@ Plan:
 
 5.Optimalize program
 
+As i learn more i will be coming back to this project to add more stuff. if you have any ideas, advices you can hit me up im open for guidence.
