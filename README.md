@@ -1,18 +1,12 @@
-## Getting Started
+## Snake Game
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Hello this is my first game i plan on updating and modifying it so it could simulate generations of AIsnakes that learn
+## Nothing much, non the less
 
-## Folder Structure
+Plan:
+1.Create playable game [done]
+2.Optimalize game [done]
+3.Creaete Swarms of snakes and and generations of snakes classes
+4.Implement Neural Network to the program
+5.Optimalize program
 
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
