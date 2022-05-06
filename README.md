@@ -1,6 +1,22 @@
 ## Snake Game
 
 Hello this is my first game i plan on updating and modifying it so it could simulate generations of AIsnakes that learn
+
+
+
+
+
+
+
+![image](https://user-images.githubusercontent.com/26069406/167049141-c5424cdb-7b93-437d-8d18-074a587a36e8.png)
+![image](https://user-images.githubusercontent.com/26069406/167049221-1c19f125-c96e-4c04-9cd2-60d4fd7d7fef.png)
+
+
+
+
+
+Game has space on the left for further development
+
 ## Nothing much, non the less
 
 Plan:
