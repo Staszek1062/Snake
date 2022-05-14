@@ -21,9 +21,9 @@ public class Game extends JPanel implements ActionListener {
     int direction = 3;
     int bodyValue = 3;
     int population = 300;
-
+    boolean humanplayer = true;
     boolean seeVision = true;
-    boolean replay = true;
+    boolean replay = false;
     boolean running = false;
     boolean simulation = false;
     boolean replayBest = true;
@@ -37,8 +37,8 @@ public class Game extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
-        backgroundImage = new ImageIcon("Snake/src/Window/Background_grass.jpg").getImage();
-        this.addKeyListener(new ControlWithKeys());
+        backgroundImage = new ImageIcon("src/Window/Background_grass.jpg").getImage();
+        this.addKeyListener(new ControlWithKeys(this));
         run();
     }
 
@@ -47,10 +47,6 @@ public class Game extends JPanel implements ActionListener {
         placeApple();
         timer = new Timer(75, this);
         timer.start();
-    }
-
-    public void inicialize() {
-  
     }
 
     public void draw(Graphics g) {
@@ -146,8 +142,8 @@ public class Game extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (running) {
-            Snake();
+        if (running && humanplayer) {
+            Snakes();
         }
         repaint();
     }
@@ -157,11 +153,14 @@ public class Game extends JPanel implements ActionListener {
         yApple = random.nextInt((int) (PANEL_HEIGHT / Cell)) * Cell;
     }
 
-    public void Snake() {
+   
+
+    public void Snakes() {
         move();
         checkCollision();
         checkFood();
     }
+
     public void move() {
         for (int i = bodyValue; i > 0; i--) {
             xCellGrid[i] = xCellGrid[i - 1];
@@ -204,7 +203,7 @@ public class Game extends JPanel implements ActionListener {
 
     private boolean wallCollide(int x, int y) {
         if (x >= PANEL_WIDTH || x < 500 || y >= PANEL_HEIGHT || y < 0) {
-            System.out.print("xxxxx " + x + "   " + y);
+
             return true;
 
         }
@@ -226,34 +225,6 @@ public class Game extends JPanel implements ActionListener {
         }
         return false;
     }
+    
 
-    public class ControlWithKeys extends KeyAdapter {
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_LEFT:
-                    if (direction != 3) {
-                        direction = 1;
-                    }
-                    break;
-                case KeyEvent.VK_UP:
-                    if (direction != 4) {
-                        direction = 2;
-                    }
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    if (direction != 1) {
-                        direction = 3;
-                    }
-                    break;
-                case KeyEvent.VK_DOWN:
-                    if (direction != 2) {
-                        direction = 4;
-                    }
-                    break;
-
-            }
-        }
-    }
 }
