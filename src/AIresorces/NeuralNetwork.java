@@ -2,7 +2,7 @@ package AIresorces;
 
 import java.util.ArrayList;
 import java.util.List;
-import Matrix_Functions.*;
+
 /*NeuralNetwork methods
     NeuralNetwork(int,int,int)
     predict(double[]) 
@@ -17,11 +17,11 @@ public class NeuralNetwork {
 
 	public NeuralNetwork(int i, int h, int o) {
 
-		weights_ih = new Matrix(h, i); //Tworzenie Tabeli wskaźników UWe
-		weights_ho = new Matrix(o, h); //Tworzenie Tabeli wskaźników WyU
+		weights_ih = new Matrix(h, i);
+		weights_ho = new Matrix(o, h);
 
-		bias_h = new Matrix(h, 1); //Tworzenie Tabeli biasu ukrytego
-		bias_o = new Matrix(o, 1); //Tworzenie Tabeli biasu wyjścia
+		bias_h = new Matrix(h, 1);
+		bias_o = new Matrix(o, 1);
 
 	}
 
