@@ -4,7 +4,11 @@ import AIresorces.NeuralNetwork;
 
 import javax.swing.JPanel;
 
+
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.*;
@@ -15,12 +19,12 @@ public class Game extends JPanel implements ActionListener {
     public final static int PANEL_HEIGHT = 500;
     public final static int Cell = 20;
     public final static int TotalCells = (PANEL_WIDTH * PANEL_HEIGHT) / (Cell * Cell * 2);
-    protected final int xCellGrid[] = new int[TotalCells];
-    protected final int yCellGrid[] = new int[TotalCells];
     Coordinate[] cords = new Coordinate[TotalCells];
     NeuralNetwork brain;
-    int xApple;
-    int yApple;
+    List<Coordinate[]> allSnakePositions;
+    Coordinate apple;
+    //int xApple;
+    //int yApple;
     int Score;
     int direction = 3;
     int bodyValue = 3;
@@ -29,10 +33,10 @@ public class Game extends JPanel implements ActionListener {
     boolean seeVision = true;
     boolean replay = true;
     boolean running = false;
-    boolean simulation = false;
+    boolean simulation = true;
     boolean replayBest = true;
     double[] vision;
-
+    List<Double> decisions;
     Timer timer;
     Random random;
 
@@ -48,11 +52,12 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void run() {
+        placeApple();
         running = true;
         initSnake();
         if(simulation)
             simulate();
-        placeApple();
+
         timer = new Timer(75, this);
         timer.start();
 
@@ -60,13 +65,22 @@ public class Game extends JPanel implements ActionListener {
 
     private void simulate() {
 
-
-        //snakeVision();
+        brain = new NeuralNetwork(24,20,4,0.04);
+        snakeVision();
         snakeThink();
     }
 
     private void snakeThink() {
-        brain = new NeuralNetwork(24,20,4,0.04);
+        double max;
+        decisions=new ArrayList<>(4);
+        decisions.addAll(brain.predict(vision));
+        max= (decisions.get(0)>decisions.get(1))?decisions.get(0):decisions.get(1);
+        max= (max>decisions.get(2))?max:decisions.get(2);
+        max= (max>decisions.get(3))?max:decisions.get(3);
+
+
+        direction = (decisions.indexOf(max)+1);
+        System.out.println(direction);
     }
     private void snakeVision() {
         vision = new double[24];
@@ -104,8 +118,12 @@ public class Game extends JPanel implements ActionListener {
         vision[23] = temp[2];
     }
     private void initSnake() {
+
+
         for (int i = 0; i < TotalCells; i++)
             cords[i]= new Coordinate();
+        cords[0].setX(Cell*10);
+        cords[0].setY(Cell*10);
     }
 
     public void draw(Graphics g) {
@@ -126,12 +144,10 @@ public class Game extends JPanel implements ActionListener {
         for (int i = 0; i < bodyValue; i++) { // drawing Snake
             if (i == 0) {
                 g.setColor(Color.green);
-                // g.fillRect(xCellGrid[i] + 500, yCellGrid[i], Cell, Cell);
                 g.fillRect(cords[i].getX() + 500, cords[i].getY(), Cell, Cell);
             } else {
 
                 g.setColor(new Color(40, 160, 0));
-                // g.fillRect(xCellGrid[i] + 500, yCellGrid[i], Cell, Cell);
                 g.fillRect(cords[i].getX() + 500, cords[i].getY(), Cell, Cell);
             }
         }
@@ -146,7 +162,7 @@ public class Game extends JPanel implements ActionListener {
 
     private void drawApple(Graphics g) {
         g.setColor(Color.red);// drawing apple
-        g.fillOval(xApple + 500, yApple, Cell, Cell);
+        g.fillOval(apple.getX() + 500, apple.getY(), Cell, Cell);
     }
 
     private void drawVision(Graphics g ) {
@@ -169,14 +185,15 @@ public class Game extends JPanel implements ActionListener {
             int cPos = (Cell - cSize)/2;
             int i=1;
             Coordinate[] line;
+
             do{
                 int x = cord.getX() + xVector * i + 500 + cPos;
                 int y = cord.getY() + yVector * i + cPos;
-
-                g.drawOval(x,y, cSize, cSize);
-                i++;
                 if(wallCollide(x,y))
                     return;
+                g.drawOval(x,y, cSize, cSize);
+                i++;
+
             }while(i<PANEL_HEIGHT/Cell);
     }
     private double[] checkVisionLine(int xVector, int yVector, Coordinate cord) {
@@ -236,8 +253,9 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void placeApple() {
-        xApple = (random.nextInt((int) (PANEL_WIDTH / (2 * Cell))) * Cell);
-        yApple = random.nextInt((int) (PANEL_HEIGHT / Cell)) * Cell;
+        apple= new Coordinate((random.nextInt((int) (PANEL_WIDTH / (2 * Cell))) * Cell),random.nextInt((int) (PANEL_HEIGHT / Cell)) * Cell);
+        //xApple = (random.nextInt((int) (PANEL_WIDTH / (2 * Cell))) * Cell);
+        //yApple = random.nextInt((int) (PANEL_HEIGHT / Cell)) * Cell;
     }
     public void Snakes() {
         move();
@@ -250,33 +268,29 @@ public class Game extends JPanel implements ActionListener {
         for (int i = bodyValue; i > 0; i--) {
             cords[i].setX(cords[i - 1].getX());
             cords[i].setY(cords[i - 1].getY());
-            xCellGrid[i] = xCellGrid[i - 1];
-            yCellGrid[i] = yCellGrid[i - 1];
+
         }
         switch (direction) {
             case 1: // left
-                xCellGrid[0] = xCellGrid[0] - Cell;
                 cords[0].setX(cords[0].getX() - Cell);
                 break;
             case 2: // up
-                yCellGrid[0] = yCellGrid[0] - Cell;
                 cords[0].setY(cords[0].getY() - Cell);
                 break;
 
             case 3: // right
-                xCellGrid[0] = xCellGrid[0] + Cell;
                 cords[0].setX(cords[0].getX() + Cell);
                 break;
             case 4: // down
-                yCellGrid[0] = yCellGrid[0] + Cell;
                 cords[0].setY(cords[0].getY() + Cell);
                 break;
         }
     }
 
     public void checkCollision() {
-        if (wallCollide(xCellGrid[0] + 500, yCellGrid[0]) || bodyCollide(xCellGrid[0] + 500, yCellGrid[0])) {
+        if (wallCollide(cords[0].getX() + 500, cords[0].getY()) || bodyCollide(cords[0].getX() + 500, cords[0].getY())) {
             running = false;
+            System.out.println("sadasda"+cords[0].getX());
         }
         if (!running) {
             timer.stop();
@@ -285,7 +299,7 @@ public class Game extends JPanel implements ActionListener {
 
     private boolean bodyCollide(int x, int y) {
         for (int i = bodyValue; i > 0; i--) {
-            if ((x == xCellGrid[i] + 500) && (y == yCellGrid[i]))
+            if ((x == cords[i].getX() + 500) && (y == cords[i].getY()))
                 return true;
         }
         return false;
@@ -299,14 +313,14 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void checkFood() {
-        if (foodCollide(xCellGrid[0] + 500, yCellGrid[0])) {
+        if (foodCollide(cords[0].getX() + 500, cords[0].getY())) {
             bodyValue++;
             Score++;
             placeApple();
         }
     }
     private boolean foodCollide(int xVector, int yVector) {
-        if (xVector == xApple + 500 && yVector == yApple) {
+        if (xVector == apple.getX() + 500 && yVector == apple.getY()) {
             return true;
         }
         return false;
