@@ -46,14 +46,12 @@ public class Simulate {
         int i =0;
         while(i<=200&&!snakeDead){
 
-            Coordinate[] currentCoords=getCoordinates(coords,bodyValue);
+            Coordinate[] currentCoords= getCoordinates(coords,bodyValue);
             if (collisions.wallCollide(currentCoords[0]) || collisions.bodyCollide(currentCoords,currentCoords.length)){
-                System.out.println(collisions.wallCollide(currentCoords[0])+"ss" +collisions.bodyCollide(currentCoords,currentCoords.length));
-
-
+                //System.out.println(collisions.wallCollide(currentCoords[0])+"ss" +collisions.bodyCollide(currentCoords,currentCoords.length));
             snakeDead =true;
             }
-            System.out.println(currentCoords[0].getX());
+
             if(collisions.foodCollide(currentCoords[0],foodList.get(foodIdx))) {
                 placeApple();
                 foodIdx++;
@@ -61,10 +59,16 @@ public class Simulate {
             snakeVision();
             snakeThink();
             move();
-            i++;
             snakePath.add(currentCoords);
+            System.out.println(currentCoords[0].getX()+"  "+currentCoords[0].getY()+"  "+snakePath.get(i)[0].getX()+" "+snakePath.get(i)[0].getX());
+            i++;
+
+
 
         }
+        for(Coordinate[] c:snakePath)
+            System.out.println(c[0].getX()+"  "+c[0].getY());
+
    /*     for (Coordinate[] c:snakePath)
             System.out.println(c[0].getX());*/
     }

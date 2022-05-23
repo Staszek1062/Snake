@@ -80,7 +80,7 @@ public class Game extends JPanel implements ActionListener {
             bodyValue=snakePath.get(step).length;
             for (int i = 0; i < snakePath.get(step).length; i++)
                 cords[i] = snakePath.get(step)[i];
-            System.out.println(cords[0].getX());
+           // System.out.println(cords[0].getX()+"   "+cords[0].getY());
         }
         step++;
 
