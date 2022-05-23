@@ -5,18 +5,10 @@ import java.awt.event.KeyEvent;
 
 public class ControlWithKeys extends KeyAdapter {
 
-    /**
-     *
-     */
     private final Game game;
-
-    /**
-     * @param game
-     */
     ControlWithKeys(Game game) {
         this.game = game;
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
