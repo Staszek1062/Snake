@@ -32,13 +32,13 @@ public class Game extends JPanel implements ActionListener {
     boolean replay = true;
     boolean running = false;
     boolean simulation = true;
+    boolean simInitialized = false;
     boolean replayBest = true;
     double[] vision;
 
     Timer timer;
     Random random;
-    Simulate simulate = new Simulate(PANEL_WIDTH,PANEL_HEIGHT,Cell);
-
+    Population pop = new Population(population,PANEL_WIDTH,PANEL_HEIGHT,Cell);
     public Game() {
 
         random = new Random();
@@ -47,6 +47,7 @@ public class Game extends JPanel implements ActionListener {
         this.setFocusable(true);
         this.addKeyListener(new ControlWithKeys(this));
         run();
+        if(simulation)
         sim();
 
     }
@@ -55,7 +56,6 @@ public class Game extends JPanel implements ActionListener {
 
 
     public void run() {
-        cords=simulate.initSnake(cords);
         placeApple();
         running = true;
         timer = new Timer(75, this);
@@ -63,14 +63,14 @@ public class Game extends JPanel implements ActionListener {
 
     }
     private void sim() {
+        pop.start();
         snakePath= new ArrayList<>();
         foodList= new ArrayList<>();
-        simulate.snake();
-        for(Coordinate[] c:simulate.snakePath)
+        for(Coordinate[] c:pop.getBestSnakePath())
         snakePath.add(c);
-        for(Coordinate c:simulate.foodList)
+        for(Coordinate c:pop.getBestFoodList())
         foodList.add(c);
-
+        simInitialized= true;
 
     }
 
@@ -85,16 +85,6 @@ public class Game extends JPanel implements ActionListener {
         step++;
 
     }
-
-    private void drawBest() {
-        int foodInx=0;
-        for(int i=0; i<snakePath.size();i++) {
-            drawApple(this.getGraphics(), foodList.get(foodInx));
-            drawSnake(this.getGraphics(), snakePath.get(i));
-        }
-    }
-
-
     public void placeApple() {
         apple= new Coordinate((random.nextInt((int) (PANEL_WIDTH / (2 * Cell))) * Cell),random.nextInt((int) (PANEL_HEIGHT / Cell)) * Cell);
 
@@ -105,6 +95,7 @@ public class Game extends JPanel implements ActionListener {
            running=false;}
         checkRun();
         checkFood();
+
 }
 
     private void checkRun() {
@@ -252,8 +243,9 @@ public class Game extends JPanel implements ActionListener {
         if (running) {
             if(!simulation){
                 step=2;
-                snakes();}
-            else
+                snakes();
+            }
+            if(simulation&&simInitialized)
                 subsim();
         }
         repaint();

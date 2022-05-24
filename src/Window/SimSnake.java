@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Simulate {
+public class SimSnake {
     private int panelWidth;
     int panelHeight;
     int cell;
     private final Collisions collisions;
     public static int TotalCells;
-
+    int timeleft=200;
     int foodIdx=0;
     int simScore=0;
     int direction = 3;
@@ -27,9 +27,25 @@ public class Simulate {
     List<Coordinate> foodList=new ArrayList<>();
     List<Coordinate[]> snakePath= new ArrayList<>();
 
-    NeuralNetwork brain = new NeuralNetwork(24,20,4,0.04);
 
-    public Simulate(int panelWidth, int panelHeight, int cell) {
+
+    NeuralNetwork brain = new NeuralNetwork(24,20,4,0.04);
+    public NeuralNetwork getBrain() {
+        return brain;
+    }
+    public List<Coordinate> getFoodList() {
+        return foodList;
+    }
+
+    public List<Coordinate[]> getSnakePath() {
+        return snakePath;
+    }
+
+    public int getSnakeScore() {
+        return simScore;
+    }
+
+    public SimSnake(int panelWidth, int panelHeight, int cell) {
 
         this.panelWidth = panelWidth;
         this.panelHeight = panelHeight;
@@ -44,7 +60,7 @@ public class Simulate {
         initSnake(coords);
 
         int i =0;
-        while(i<=200&&!snakeDead){
+        while(i<=timeleft&&!snakeDead){
 
             Coordinate[] currentCoords= getCoordinates(coords,bodyValue);
             if (collisions.wallCollide(currentCoords[0]) || collisions.bodyCollide(currentCoords,currentCoords.length)){
@@ -65,9 +81,9 @@ public class Simulate {
             }
             snakePath.add(temp);
             i++;
+            timeleft=200-i+foodIdx*10;
         }
-        for(int j = 0; j < snakePath.size(); j++)
-            System.out.println(snakePath.get(j)[0].getX()+"  "+snakePath.get(j)[0].getY());
+        simScore=i+foodIdx*10;
     }
 
     private void snakeThink() {

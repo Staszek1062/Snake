@@ -173,5 +173,26 @@ public class NeuralNetwork {
     }
 
 
+	public void learnFromParent(NeuralNetwork parent,int gen) {
+		int learning = (int) (l_rate*gen);
+		Matrix temp;
+		if(learning >1)
+			learning=1;
+
+		temp=Matrix.subtract(parent.bias_h,bias_h);
+		temp.multiply(learning);
+		bias_h.add(temp);
+		temp=Matrix.subtract(parent.bias_o,bias_o);
+		temp.multiply(learning);
+		bias_o.add(temp);
+
+		temp=Matrix.subtract(parent.weights_ih,weights_ih);
+		temp.multiply(learning);
+		weights_ih.add(temp);
+		temp=Matrix.subtract(parent.weights_ho,weights_ho);
+		temp.multiply(learning);
+		weights_ho.add(temp);
+
+	}
 }
  
