@@ -48,7 +48,7 @@ public class Simulate {
 
             Coordinate[] currentCoords= getCoordinates(coords,bodyValue);
             if (collisions.wallCollide(currentCoords[0]) || collisions.bodyCollide(currentCoords,currentCoords.length)){
-                //System.out.println(collisions.wallCollide(currentCoords[0])+"ss" +collisions.bodyCollide(currentCoords,currentCoords.length));
+
             snakeDead =true;
             }
 
@@ -59,18 +59,15 @@ public class Simulate {
             snakeVision();
             snakeThink();
             move();
-            snakePath.add(currentCoords);
-            System.out.println(currentCoords[0].getX()+"  "+currentCoords[0].getY()+"  "+snakePath.get(i)[0].getX()+" "+snakePath.get(i)[0].getX());
+            Coordinate[] temp = new Coordinate[bodyValue];
+            for(int j = 0; j < bodyValue; j++) {
+                temp[j]=new Coordinate(coords[j].getX(),coords[j].getY());
+            }
+            snakePath.add(temp);
             i++;
-
-
-
         }
-        for(Coordinate[] c:snakePath)
-            System.out.println(c[0].getX()+"  "+c[0].getY());
-
-   /*     for (Coordinate[] c:snakePath)
-            System.out.println(c[0].getX());*/
+        for(int j = 0; j < snakePath.size(); j++)
+            System.out.println(snakePath.get(j)[0].getX()+"  "+snakePath.get(j)[0].getY());
     }
 
     private void snakeThink() {

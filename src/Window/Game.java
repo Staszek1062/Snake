@@ -28,7 +28,7 @@ public class Game extends JPanel implements ActionListener {
     int population = 300;
     int step=0;
 
-    boolean seeVision = false;
+    boolean seeVision = true;
     boolean replay = true;
     boolean running = false;
     boolean simulation = true;
@@ -80,7 +80,7 @@ public class Game extends JPanel implements ActionListener {
             bodyValue=snakePath.get(step).length;
             for (int i = 0; i < snakePath.get(step).length; i++)
                 cords[i] = snakePath.get(step)[i];
-           // System.out.println(cords[0].getX()+"   "+cords[0].getY());
+
         }
         step++;
 
@@ -102,7 +102,7 @@ public class Game extends JPanel implements ActionListener {
     public void snakes() {
         move();
         if(collisions.checkCollision(cords,bodyValue)){
-            running=false;}
+           running=false;}
         checkRun();
         checkFood();
 }
@@ -113,8 +113,11 @@ public class Game extends JPanel implements ActionListener {
         }
     }
     public void move() {
-
-        //Coordinate[] temp= simulate.getCoordinates(cords,bodyValue);
+        cords[bodyValue]= new Coordinate();
+        for (int i = bodyValue; i > 0; i--) {
+            cords[i].setY(cords[i-1].getY());
+            cords[i].setX(cords[i-1].getX());
+        }
 
         switch (direction) {
             case 1: // left
@@ -160,6 +163,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     private void drawSnake(Graphics g) {
+        if (step>1)
         for (int i = 0; i < bodyValue; i++) { // drawing Snake
             if (i == 0) {
                 g.setColor(Color.green);
@@ -246,8 +250,9 @@ public class Game extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (running) {
-            if(!simulation)
-                snakes();
+            if(!simulation){
+                step=2;
+                snakes();}
             else
                 subsim();
         }
