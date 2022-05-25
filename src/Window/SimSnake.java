@@ -81,9 +81,9 @@ public class SimSnake {
             }
             snakePath.add(temp);
             i++;
-            timeleft=200-i+foodIdx*10;
+            timeleft=200+foodIdx*10;
         }
-        simScore=i+foodIdx*10;
+        simScore=i+foodIdx*50;
     }
 
     private void snakeThink() {

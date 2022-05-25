@@ -27,7 +27,7 @@ public class Game extends JPanel implements ActionListener {
     int bodyValue = 3;
     int population = 300;
     int step=0;
-
+    int foodIdx = 0;
     boolean seeVision = true;
     boolean replay = true;
     boolean running = false;
@@ -71,18 +71,32 @@ public class Game extends JPanel implements ActionListener {
         for(Coordinate c:pop.getBestFoodList())
         foodList.add(c);
         simInitialized= true;
+        step=0;
+        Score=0;
+        foodIdx=0;
+        apple=foodList.get(foodIdx);
 
     }
 
     private void subsim() {
 
-        if(step<snakePath.size()) {
+        if(step<snakePath.size()-1) {
             bodyValue=snakePath.get(step).length;
             for (int i = 0; i < snakePath.get(step).length; i++)
                 cords[i] = snakePath.get(step)[i];
+            if(collisions.checkCollision(cords,bodyValue)){
+                simInitialized=false;
+            }
+            if(collisions.foodCollide(cords[0],foodList.get(foodIdx))){
 
+                Score++;
+                foodIdx++;
+                apple=foodList.get(foodIdx);
+            }
         }
         step++;
+        if(step==snakePath.size()-1)
+            simInitialized=false;
 
     }
     public void placeApple() {
@@ -166,18 +180,6 @@ public class Game extends JPanel implements ActionListener {
             }
         }
     }
-    private void drawSnake(Graphics g, Coordinate[] sCoords) {
-            for (int i = 0; i < sCoords.length; i++) { // drawing Snake
-                if (i == 0) {
-                    g.setColor(Color.green);
-                    g.fillRect(sCoords[i].getX() + 500, sCoords[i].getY(), Cell, Cell);
-                } else {
-
-                    g.setColor(new Color(40, 160, 0));
-                    g.fillRect(sCoords[i].getX() + 500, sCoords[i].getY(), Cell, Cell);
-                }
-            }
-        }
     private void drawBoard(Graphics g) {
         for (int i = 0; i < PANEL_HEIGHT / Cell; i++) { // drawing of snake board lines
             g.drawLine(500 + i * Cell, 0, 500 + i * Cell, PANEL_HEIGHT);
@@ -245,8 +247,10 @@ public class Game extends JPanel implements ActionListener {
                 step=2;
                 snakes();
             }
-            if(simulation&&simInitialized)
+            else if(simInitialized)
                 subsim();
+            else
+                sim();
         }
         repaint();
     }
