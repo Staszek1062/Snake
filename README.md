@@ -25,10 +25,15 @@ Plan:
 
 2.Optimalize game [done]
 
-3.Creaete Swarms of snakes and and generations of snakes classes
+3.Creaete Swarms of snakes and and generations of snakes classes [done]
 
-4.Implement Neural Network to the program
+4.Implement Neural Network to the program [done]
 
-5.Optimalize program
+5.Somehow improve brain with each generation [started]
+
+6.Remove buggs [issued]
+
+7.Optimalize program
+
 
 As i learn more i will be coming back to this project to add more stuff. if you have any ideas, advices you can hit me up im open for guidence.
